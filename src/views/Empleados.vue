@@ -28,6 +28,7 @@
               <th>Dirección</th>
               <th>Teléfono</th>
               <th>Sexo</th>
+              <th>Comisión</th>
               <th width="10"></th>
               <th width="10"></th>
             </tr>
@@ -39,6 +40,7 @@
               <td v-text="item.dirección"></td>
               <td v-text="item.teléfono"></td>
               <td v-text="item.sexo == 0 ? 'Hombre' : 'Mujer'"></td>
+              <td v-text="`${item.comisión}%`"></td>
               <td>
                 <v-icon small dark color="red" @click="intentarBorrar(item.id)"
                   >mdi-close-circle</v-icon
@@ -94,6 +96,11 @@
               { value: 1, text: 'mujer' },
             ]"
           ></v-select>
+          <v-text-field
+            v-model="empleado.comisión"
+            label="Comisión"
+            append-icon="mdi-percent"
+          ></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -110,7 +117,13 @@ export default {
   name: "empleados-view",
   data: () => ({
     dlgNuevo: false,
-    empleado: { nombre: null, dirección: null, teléfono: null, sexo: null },
+    empleado: {
+      nombre: null,
+      dirección: null,
+      teléfono: null,
+      sexo: null,
+      comisión: null,
+    },
     editMode: 0,
   }),
   methods: {
