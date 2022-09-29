@@ -33,12 +33,13 @@ export default {
     menu: [
       { id: 1, title: "Empleados", icon: "mdi-account", to: "empleados" },
       { id: 2, title: "Ventas", icon: "mdi-cart", to: "ventas" },
-      { id: 3, title: "Opciones", icon: "mdi-cog", to: "opciones" },
+      { id: 3, title: "Arqueos", icon: "mdi-cash", to: "arqueos" },
     ],
   }),
   mounted: function () {
     this.$store.dispatch("loadData");
     this.$store.dispatch("loadSocket");
+    this.$store.dispatch("setNow");
   },
 };
 </script>

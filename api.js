@@ -20,6 +20,13 @@ app.post('/api', (req, res) => {
         sockets.emit("update",req.body.tabla);
     })
 })
+app.post('/api/guardarVenta', (req, res) => {
+    db.guardarVenta(req.body, result => {
+        res.send(result)
+        sockets.emit("update","ventas");
+        sockets.emit("update","detalleVentas");
+    })
+})
 app.put('/api', (req, res) => {
     db.save(req.body, result => {
         res.send(result)

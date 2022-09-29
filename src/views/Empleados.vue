@@ -28,6 +28,7 @@
               <th>Dirección</th>
               <th>Teléfono</th>
               <th>Sexo</th>
+              <th>Salario</th>
               <th>Comisión</th>
               <th width="10"></th>
               <th width="10"></th>
@@ -40,6 +41,7 @@
               <td v-text="item.dirección"></td>
               <td v-text="item.teléfono"></td>
               <td v-text="item.sexo == 0 ? 'Hombre' : 'Mujer'"></td>
+              <td v-text="item.salario"></td>
               <td v-text="`${item.comisión}%`"></td>
               <td>
                 <v-icon small dark color="red" @click="intentarBorrar(item.id)"
@@ -97,6 +99,10 @@
             ]"
           ></v-select>
           <v-text-field
+            v-model="empleado.salario"
+            label="Salario"
+          ></v-text-field>
+          <v-text-field
             v-model="empleado.comisión"
             label="Comisión"
             append-icon="mdi-percent"
@@ -122,6 +128,7 @@ export default {
       dirección: null,
       teléfono: null,
       sexo: null,
+      salario: null,
       comisión: null,
     },
     editMode: 0,

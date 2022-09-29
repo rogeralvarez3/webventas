@@ -22,17 +22,34 @@ const getData = (payload, callback) => {
     })
 
 }
+const guardarVenta = (payload, callback) => {
+    console.log(payload, "guardarVenta")
+    let detalle = Object.assign([], payload.detalle);
+    delete payload.detalle
+    save({ tabla: "ventas", data: Object.assign({}, payload) }, result => {
+        if (!result.errno) {
+            cn.query(`delete from detalleVentas where venta=${payload.id}`, err => {
+                detalle.forEach(item => {
+                    item.venta = result.insertId;
+                    save({ tabla: "detalleVentas", data: item }, () => { })
+                })
+            })
+            callback(result);
+        }
+    })
+
+}
 const save = (payload, callback) => {
-    console.log(payload)
+    console.log(payload, "save")
     let sql;
     if (payload.data.id) {
-        let fields = Object.keys(payload.data).map(key => { return `\`${key}\`='${payload.data[key]}'` })
+        let fields = Object.keys(payload.data).map(key => { return `\`${key}\`=${typeof payload.data[key] === 'string' ? "'" + payload.data[key] + "'" : payload.data[key]}` })
         const id = payload.data.id;
         delete payload.data.id
         sql = `update ${payload.tabla} set ${fields.join(',')} where id=${id}`
     } else {
         let fields = Object.keys(payload.data).map(key => { return `\`${key}\`` })
-        let values = Object.keys(payload.data).map(key => { return `'${payload.data[key]}'` })
+        let values = Object.keys(payload.data).map(key => { return `${typeof payload.data[key] === 'string' ? "'" + payload.data[key] + "'" : payload.data[key]}` })
         sql = `insert into ${payload.tabla}(${fields.join(',')}) values(${values.join(',')})`
     }
     console.log(sql)
@@ -46,8 +63,8 @@ const remove = (payload, callback) => {
         const sql = `delete from ${payload.tabla} where id=${payload.id}`;
         console.log(sql)
         cn.query(sql, (err) => {
-            err ? callback(err) : callback({text:`registro eliminado con id ${payload.id}`})
+            err ? callback(err) : callback({ text: `registro eliminado con id ${payload.id}` })
         })
     }
 }
-module.exports = { getData, save, remove }
+module.exports = { getData, save, remove, guardarVenta }
